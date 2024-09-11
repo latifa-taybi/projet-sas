@@ -11,9 +11,19 @@ struct etudiant{
 };
 
 
-struct etudiant etudiants[100];
+struct etudiant etudiants[1000];
 int count=0;
 
+
+struct dep{
+	char nom_dep[50];
+	float somme_note;
+	int nbr_etd;
+};
+
+
+struct dep departements[30];
+int nbr_dep=0;
 
 
 
@@ -27,7 +37,7 @@ int id_trouve(int id){
 
 void ajout(){
 	int index;
-	if(count>=100){
+	if(count>=1000){
 		printf("impossibles d'ajouter un autre etudiant.\n");
 	}else{
     	printf("l'etudiant %d :\n", count+1);
@@ -126,9 +136,6 @@ void modifier(){
 	index=recherche_etd(id);
 	if(index!=-1){
 		affiche_element(index);
-	}else{
-		printf("l'etudiant n'existe pas.\n");
-	}
 	
 	printf("1 : modifier le nom d'etudiant.\n");
 	printf("2 : modifier le prenom d'etudiant.\n");
@@ -161,6 +168,11 @@ void modifier(){
     		printf("entrer un autre  choix.\n");
     		break;
 		}
+		printf("l'etudiant apres la modification: \n");
+		affiche_element(index);
+	}else{
+		printf("l'etudiant n'existe pas.\n");
+	}
 }
 
 void supprimer(){
@@ -187,14 +199,20 @@ void afficher(){
 }
 
 
-
-
-
-
-
 void affiche_nb_total(){
 	printf("le nombre totale des etudiants inscrits est: %d\n", count);
 }
+
+
+void affiche_nb_etd_dep(){
+	printf("tableau des departements et nombre d'etudiants :\n");
+    printf("------------------------------------------\n");
+    for (int i = 0; i < nbr_dep; i++) {
+        printf("Département : %s | Nombre d'étudiants : %d\n", departements[i].nom_dep, departements[i].nbr_etd);
+    }
+    printf("------------------------------------------\n");
+}
+
  
 void affiche_etd_note_sup_seuil(){
 	int seuil;
@@ -240,10 +258,14 @@ void rech_etd_nom(){
 }
 
 void nb_etd_reus(){
+	int existe = 0;
 	for (int i = 0 ; i < count ; i++){	
 		if (etudiants[i].note > 10 ){
 			affiche_element(i);
+			existe= 1;
 		}
+	}if (!existe){
+		printf("aucun etudiant n'a reussi.\n");
 	}
 }
  
@@ -263,7 +285,7 @@ void statistique(){
    	    case 1:
     		affiche_nb_total();
     		break;
- /*   	case 2:
+/*        case 2:
     		affiche_nb_etd_dep();
     		break;*/
     	case 3:
@@ -297,7 +319,7 @@ void affiche_etd_dep(){
 		}	
 	}
 	if(!exist){
-		printf("l'etudiant n'existe pas.\n");
+		printf("pas d etudiants dans ce departement.\n");
 	}
 }
 
@@ -328,8 +350,8 @@ void tri_note(){
 	for(int i = 0 ; i < count-1 ; i++){
  		for (int j = i+1 ; j < count ; j++){
  			if( etudiants[i].note < etudiants[j].note){
- 				int tmp = etudiants[i];
- 				etudiants[i] = etudiants[j]e;
+ 			    tmp = etudiants[i];
+ 				etudiants[i] = etudiants[j];
  				etudiants[j] = tmp;
 			}
 	    }
@@ -340,6 +362,22 @@ void tri_note(){
 }
 
 
+void tri_alph(){
+    struct etudiant tmp;
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = i + 1; j < count; j++) {
+            if (strcmp(etudiants[i].nom, etudiants[j].nom) > 0) {
+                tmp = etudiants[i];
+                etudiants[i] = etudiants[j];
+                etudiants[j] = tmp;
+            }
+        }
+    }
+    for (int i = 0; i < count; i++) {
+    	affiche_element(i);
+	}
+}
+
 void tri(){
 	int choix;
 	printf("1 : tri alphabétique des étudiants en fonction de leur nom.\n");
@@ -348,9 +386,9 @@ void tri(){
 	printf("entrer un choix : ");
 	scanf("%d",&choix);
 	switch(choix){
-/*		case 1:
+		case 1:
 			tri_alph();
-			break;*/
+			break;
 		case 2:
 			tri_note();
 			break;
