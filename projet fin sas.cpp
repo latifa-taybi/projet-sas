@@ -7,23 +7,12 @@ struct etudiant{
 	    char prenom[50];
 	    char date_nais[10];
 	    char departement[50];
-	    int note;
+	    float note;
 };
 
 
 struct etudiant etudiants[1000];
 int count=0;
-
-
-struct dep{
-	char nom_dep[50];
-	float somme_note;
-	int nbr_etd;
-};
-
-
-struct dep departements[30];
-int nbr_dep=0;
 
 
 
@@ -40,6 +29,7 @@ void ajout(){
 	if(count>=1000){
 		printf("impossibles d'ajouter un autre etudiant.\n");
 	}else{
+		 printf("\n ============= ajouter un etudiant ==================\n");
     	printf("l'etudiant %d :\n", count+1);
     
     	do{
@@ -59,7 +49,7 @@ void ajout(){
 		printf("     entrer le departement d'etudiant:  ");
 		scanf(" %s",etudiants[count].departement);
 		printf("     entrer la note generale d'etudiant:  ");
-		scanf("%d",&etudiants[count].note);
+		scanf("%f",&etudiants[count].note);
 		count++;		
 	}
 }
@@ -73,13 +63,14 @@ int recherche_etd(int num_unique){
 
 
 void affiche_element(int i){
-	printf("l'etudiant %d :\n", i+1);
+	printf("\n--- les informations de l'etudiant %d :---\n", i + 1);
 	printf("     l'id d'etudiant: %d \n ",etudiants[i].id);        
 	printf("     le nom d'etudiant: %s \n",etudiants[i].nom);
 	printf("     le prenom d'etudiant: %s \n",etudiants[i].prenom);
 	printf("     la date de naissance d'etudiant: %s \n",etudiants[i].date_nais);
 	printf("     le departement d'etudiant: %s \n",etudiants[i].departement);
-	printf("     la note generale d'etudiant: %d \n",etudiants[i].note);
+	printf("     la note generale d'etudiant: %f \n",etudiants[i].note);
+	printf("------------------------------------------\n");
 }
 
 void modif_nom(int index){
@@ -120,9 +111,9 @@ void modif_dep(int index){
 
 void modif_note(int index){
 	int note_modifier;
-	printf("la note : %d\n",etudiants[index].note);
+	printf("la note : %f\n",etudiants[index].note);
 	printf("entrer la nouvelle note:  ");
-	scanf(" %d",&note_modifier);
+	scanf(" %f",&note_modifier);
 	etudiants[index].note=note_modifier;
 }
 
@@ -131,6 +122,7 @@ void modifier(){
 	int choix;
 	int id;
 	int index;
+	printf("\n =========== modification des informations des etudiants  ============\n");
 	printf("entrer l'id de l etudiant dont on va faire la modification : ");
 	scanf("%d",&id);
 	index=recherche_etd(id);
@@ -191,7 +183,6 @@ void supprimer(){
 
 
 
-
 void afficher(){
 	for(int i=0 ;i < count ;i++){
 		affiche_element(i);
@@ -199,25 +190,47 @@ void afficher(){
 }
 
 
+
 void affiche_nb_total(){
+	printf("\n--- le nombre total des etudiants ---\n");
 	printf("le nombre totale des etudiants inscrits est: %d\n", count);
+	printf("------------------------------------------\n");
 }
 
-
 void affiche_nb_etd_dep(){
-	printf("tableau des departements et nombre d'etudiants :\n");
-    printf("------------------------------------------\n");
-    for (int i = 0; i < nbr_dep; i++) {
-        printf("Département : %s | Nombre d'étudiants : %d\n", departements[i].nom_dep, departements[i].nbr_etd);
+	printf("\n----- nombre d'etudiants par dppartement -----:\n");
+	char dep[20][50];
+	int count_dep=0;
+            for (int i = 0; i < count; i++) {
+                int existe=0; 
+                for (int j = 0; j < count_dep; j++) {
+                    if (strcmp(etudiants[i].departement, etudiants[j].departement) == 0) {
+                        existe = 1;
+                        break;
+                    }
+                }if (!existe)
+                strcpy(dep[count_dep], etudiants[i].departement);
+        count_dep++;
+        }
+    for (int i = 0; i < count; i++)
+    {
+        int count_dep = 0;
+        for (int j = 0; j < count; j++)
+        {
+            if (strcmp(dep[i], etudiants[j].departement) == 0)
+            {
+                count_dep++;
+            }
+        }
+        printf("departement %s contient : %d etudiants\n", dep[i], count_dep);
     }
-    printf("------------------------------------------\n");
 }
 
  
 void affiche_etd_note_sup_seuil(){
-	int seuil;
+	float seuil;
 	printf("entrer un seuil : ");
-	scanf("%d",&seuil);
+	scanf("%f",&seuil);
 	for(int i=0 ; i < count ; i++){
 		if(etudiants[i].note > seuil){
 		affiche_element(i);
@@ -226,22 +239,9 @@ void affiche_etd_note_sup_seuil(){
 }
 
 
-void rech_etd_nom(){
-	char nom_a_rechercher[50];
-	int existe = 0;
-	printf("entrer le nom d'etudiant a rechercher: ");
-	scanf(" %s",nom_a_rechercher);
-	for(int i = 0; i < count; i++){
-		if(strcmp(etudiants[i].nom,nom_a_rechercher)==0){
-			affiche_element(i);
-			existe = 1;
-		}
-	}if(!existe){
-		printf("l'etudiant n'existe pas.\n");
-	}
-}
+
  
- void trois_prem_etd(){
+void trois_prem_etd(){
  	struct etudiant tmp;
  	for(int i = 0 ; i < count-1 ; i++){
  		for (int j = i+1 ; j < count ; j++){
@@ -252,23 +252,67 @@ void rech_etd_nom(){
 			}
 	    }
     }
+    printf("\n--- les 3 premiers etudiants ---\n");
  	for (int i = 0 ; i < 3 ; i++){
  		affiche_element(i);
 	}
+	printf("------------------------------------------\n");
 }
 
-void nb_etd_reus(){
-	int existe = 0;
-	for (int i = 0 ; i < count ; i++){	
-		if (etudiants[i].note > 10 ){
-			affiche_element(i);
-			existe= 1;
-		}
-	}if (!existe){
-		printf("aucun etudiant n'a reussi.\n");
-	}
+
+void nb_etd_reus_dep(){
+    int reussi=0;
+    char dep[20];
+    printf("entrer le nom de departement: ");
+    scanf(" %s",dep);
+    for (int i = 0; i < count; i++){
+        if (strcmp(etudiants[i].departement, dep) == 0 && etudiants[i].note >= 10){
+            reussi++;
+        }
+    }
+    printf("Le nombre d'etudiants ayant reussi dans le departement %s:%d\n",dep,reussi);
 }
+   
  
+ 
+ void calculer(){
+ float somme_note_dep[30] = {0};
+    int nb_etd_dep[30] = {0};
+    char departements[30][50];
+    int nbr_dep = 0;
+    float somme_note_univer = 0;
+    int nb_etd_univer = 0;
+    for (int i = 0; i < count; i++) {
+        int index_dep = -1;
+        for (int j = 0; j < nbr_dep; j++) {
+            if (strcmp(departements[j], etudiants[i].departement) == 0) {
+                index_dep = j;
+                break;
+            }
+        }
+        if (index_dep == -1) {
+            strcpy(departements[nbr_dep], etudiants[i].departement);
+            index_dep = nbr_dep;
+            nbr_dep++;
+        }
+        somme_note_dep[index_dep] += etudiants[i].note;
+        nb_etd_dep[index_dep]++;
+        
+        somme_note_univer += etudiants[i].note;
+        nb_etd_univer++;
+    }
+
+    printf("\n--- la moyenne generale de chaque departement ---\n");
+    for (int i = 0; i < nbr_dep; i++) {
+        float moyenne_dep = somme_note_dep[i] / nb_etd_dep[i];
+        printf(" departement %s : moyenne generale = %f\n", departements[i], moyenne_dep);
+    }
+
+    float moyenne_univer = somme_note_univer / nb_etd_univer;
+    printf("\n--- moyenne generale de l'universite ---\n");
+    printf(" Moyenne generale = %f\n", moyenne_univer);
+    printf("------------------------------------------\n");
+}
  
  
  
@@ -285,9 +329,9 @@ void statistique(){
    	    case 1:
     		affiche_nb_total();
     		break;
-/*        case 2:
+        case 2:
     		affiche_nb_etd_dep();
-    		break;*/
+    		break;
     	case 3:
     		affiche_etd_note_sup_seuil();
     		break;
@@ -295,7 +339,7 @@ void statistique(){
     		trois_prem_etd();
     		break;
     	case 5:
-    		nb_etd_reus();
+    		nb_etd_reus_dep();
     		break;
     	case 0:
     		printf("quitter le programme.\n");
@@ -306,6 +350,20 @@ void statistique(){
 	}
 }
 
+void rech_etd_nom(){
+	char nom_a_rechercher[50];
+	int existe = 0;
+	printf("entrer le nom d'etudiant a rechercher: ");
+	scanf(" %s",nom_a_rechercher);
+	for(int i = 0; i < count; i++){
+		if(strcmp(etudiants[i].nom,nom_a_rechercher)==0){
+			affiche_element(i);
+			existe = 1;
+		}
+	}if(!existe){
+		printf("l'etudiant n'existe pas.\n");
+	}
+}
 
 void affiche_etd_dep(){
 	char dep_recherche[50];
@@ -398,7 +456,7 @@ void tri_reuss() {
     }
     printf("les etudiants reussits en ordre croissant :\n");
     for (int i = 0; i < count_reuss; i++) {
-    	
+    	affiche_element(i);
     }
 }
 
@@ -431,6 +489,7 @@ void tri(){
 void menu(){
 	int choix;
 	do{
+		printf("\n--- le menu principal ---\n");
 		printf("1 : ajouter un etudiant.\n");
 		printf("2 : modifier les informations d un etudiant.\n");
 		printf("3 : supprimer un etudiant.\n");
@@ -454,9 +513,9 @@ void menu(){
 			case 4:
 				afficher();
 				break;
-/*			case 5:
+			case 5:
 				calculer();
-				break;*/
+				break;
 			case 6:
 				statistique();
 				break;
