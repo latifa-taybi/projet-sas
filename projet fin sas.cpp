@@ -378,6 +378,30 @@ void tri_alph(){
 	}
 }
 
+
+void tri_reuss() {
+    struct etudiant tmp;
+    int count_reuss = 0;
+    for (int i = 0; i < count; i++) {
+        if (etudiants[i].note >= 10) {
+            etudiants[count_reuss++] = etudiants[i];
+        }
+    }
+    for (int i = 0; i < count_reuss - 1; i++) {
+        for (int j = i + 1; j < count_reuss; j++) {
+            if (etudiants[i].note < etudiants[j].note)  {
+                tmp = etudiants[i]; 
+                etudiants[i] = etudiants[j]; 
+                etudiants[j] = tmp;  
+            }
+        }
+    }
+    printf("les etudiants reussits en ordre croissant :\n");
+    for (int i = 0; i < count_reuss; i++) {
+    	
+    }
+}
+
 void tri(){
 	int choix;
 	printf("1 : tri alphabétique des étudiants en fonction de leur nom.\n");
@@ -392,9 +416,9 @@ void tri(){
 		case 2:
 			tri_note();
 			break;
-/*		case 3:
-			tri_reus();
-			break;*/
+		case 3:
+			tri_reuss();
+			break;
 		case 0:
 			printf("quitter le programme.");
 			break;
