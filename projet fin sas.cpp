@@ -197,7 +197,6 @@ void affiche_nb_total(){
 	printf("------------------------------------------\n");
 }
 
-<<<<<<< HEAD
 void affiche_nb_etd_dep(){
 	printf("\n----- nombre d'etudiants par dppartement -----:\n");
 	char dep[20][50];
@@ -226,17 +225,12 @@ void affiche_nb_etd_dep(){
         printf("departement %s contient : %d etudiants\n", dep[i], count_dep);
     }
 }
-=======
-
-
-
->>>>>>> 033222cb689504dce319e99bc724ff475c33c749
 
  
 void affiche_etd_note_sup_seuil(){
-	float seuil;
+	int seuil;
 	printf("entrer un seuil : ");
-	scanf("%f",&seuil);
+	scanf("%d",&seuil);
 	for(int i=0 ; i < count ; i++){
 		if(etudiants[i].note > seuil){
 		affiche_element(i);
@@ -267,16 +261,30 @@ void trois_prem_etd(){
 
 
 void nb_etd_reus_dep(){
-    int reussi=0;
-    char dep[20];
-    printf("entrer le nom de departement: ");
-    scanf(" %s",dep);
+    char dep[20][50];
+    int count_dep=0;
     for (int i = 0; i < count; i++){
-        if (strcmp(etudiants[i].departement, dep) == 0 && etudiants[i].note >= 10){
-            reussi++;
-        }
+    	int existe = 0;
+	    for (int j = 0; j < i; j++){
+	        if (strcmp(etudiants[i].departement, etudiants[j].departement) == 0){
+	        existe = 1;
+	        break;
+	      }
+    }if (!existe){
+      strcpy(dep[count_dep], etudiants[i].departement);
+      count_dep++;
     }
-    printf("Le nombre d'etudiants ayant reussi dans le departement %s:%d\n",dep,reussi);
+  }
+    for (int i = 0; i < count_dep; i++){
+	    float somme = 0;
+	    int length = 0;
+	    for (int j = 0; j < count; j++){
+	       if (strcmp(dep[i], etudiants[j].departement) == 0 && etudiants[j].note >= 10){
+	        length++;
+	      }
+	    }
+	    printf("le nombre des etudient de departement %s est : %d \n: ", etudiants[i].departement, length);
+	   }
 }
    
  
@@ -324,11 +332,11 @@ void nb_etd_reus_dep(){
  
 void statistique(){
 	int choix;
-    printf("1 : afficher le nombre total d'Ã©tudiants inscrits.\n");
-   	printf("2 : afficher le nombre d'Ã©tudiants dans chaque dÃ©partement.\n");
-    printf("3 : afficher les Ã©tudiants ayant une moyenne gÃ©nÃ©rale supÃ©rieure Ã  un certain seuil.\n");
-    printf("4 : afficher les 3 Ã©tudiants ayant les meilleures notes.\n");
-    printf("5 : afficher le nombre d'Ã©tudiants ayant rÃ©ussi dans chaque dÃ©partement.\n");
+    printf("1 : afficher le nombre total d'étudiants inscrits.\n");
+   	printf("2 : afficher le nombre d'étudiants dans chaque département.\n");
+    printf("3 : afficher les étudiants ayant une moyenne générale supérieure à un certain seuil.\n");
+    printf("4 : afficher les 3 étudiants ayant les meilleures notes.\n");
+    printf("5 : afficher le nombre d'étudiants ayant réussi dans chaque département.\n");
     printf("entrer un choix : ");
 	scanf("%d",&choix);
     switch(choix){
@@ -389,8 +397,8 @@ void affiche_etd_dep(){
 
 void recherche(){
 	int choix;
-	printf("1 : rechercher un Ã©tudiant par son nom.\n");
-	printf("2 : afficher la liste des Ã©tudiants inscrits dans un dÃ©partement spÃ©cifique.\n");
+	printf("1 : rechercher un étudiant par son nom.\n");
+	printf("2 : afficher la liste des étudiants inscrits dans un département spécifique.\n");
 	printf("entrer un choix : ");
 	scanf("%d",&choix);
 	switch(choix){
@@ -468,9 +476,9 @@ void tri_reuss() {
 
 void tri(){
 	int choix;
-	printf("1 : tri alphabÃ©tique des Ã©tudiants en fonction de leur nom.\n");
-	printf("2 : tri des Ã©tudiants par moyenne gÃ©nÃ©rale, du plus Ã©levÃ© au plus faible ou inversement.\n");
-	printf("3 : tri des Ã©tudiants selon leur statut de rÃ©ussite.\n");
+	printf("1 : tri alphabétique des étudiants en fonction de leur nom.\n");
+	printf("2 : tri des étudiants par moyenne générale, du plus élevé au plus faible ou inversement.\n");
+	printf("3 : tri des étudiants selon leur statut de réussite.\n");
 	printf("entrer un choix : ");
 	scanf("%d",&choix);
 	switch(choix){
